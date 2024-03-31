@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p>
+        <input type="text" name="a">
+    </p>
+    <p>
+        <input type="file" name="img">
+    </p>
+    <p>
+        <button>提交</button>
+    </p>
+    <img src="" alt="">
+    <script>
+        function upload(){
+            const inpA = document.querySelector('[name=a]')
+            const inpFile = document.querySelector('[name=img]')
+
+            const formData = new FormData()
+            formData.append('a',inpA.value)
+            formData.append('file',inpFile.files[0],inpFile.files[0].name)
+
+            fetch('/api/upload',{
+                body:formData,
+                method:'POST',
+            }).then((resp)=>{
+                return resp.json()
+            }).then((resp)=>{
+                console.log(resp)
+                if(resp.code){
+                    //
+                    console.log(resp.msg)
+                }else{
+                    document.querySelector('img').src = resp.data.path
+                }
+            })
+        }
+        document.querySelector('button').onclick = upload
+    </script>
+</body>
+</html>
